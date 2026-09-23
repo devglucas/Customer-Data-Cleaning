@@ -1,0 +1,5 @@
+regra,pares,similaridade_media,similaridade_minima
+cpf,2857,0.991,0.765
+email_e_nome,1968,0.991,0.889
+telefone_e_nome,2139,0.99,0.9
+nascimento_e_nome,3081,0.991,0.889

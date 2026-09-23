@@ -1,0 +1,11 @@
+campo,preenchido_pct,correto_quando_preenchido_pct
+nome,100.0,94.72
+cpf,96.29,100.0
+data_nascimento,97.87,100.0
+genero,88.54,100.0
+email,95.39,99.06
+telefone,96.59,99.4
+cidade,97.78,100.0
+uf,97.78,100.0
+cep,91.69,98.53
+opt_in_marketing,100.0,96.94

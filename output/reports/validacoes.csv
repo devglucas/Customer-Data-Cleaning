@@ -1,0 +1,17 @@
+tabela,regra,severidade,registros_com_falha,passou
+clientes,cliente_id único,critica,0,True
+clientes,CPF único entre clientes,critica,0,True
+clientes,CPF válido quando preenchido,critica,0,True
+clientes,e-mail válido quando preenchido,critica,0,True
+clientes,telefone válido quando preenchido,critica,0,True
+clientes,CEP válido quando preenchido,critica,0,True
+clientes,UF válida quando preenchida,critica,0,True
+clientes,idade entre 16 e 110 anos,critica,0,True
+clientes,nome preenchido,critica,0,True
+registros,todo registro pertence a um cliente,critica,0,True
+registros,soma de qtd_registros = total de registros,critica,0,True
+registros,nenhum cliente reúne CPFs diferentes,critica,0,True
+clientes,cliente com CPF,alerta,223,False
+clientes,cliente com e-mail ou telefone,alerta,13,False
+clientes,cliente com data de nascimento,alerta,128,False
+clientes,cliente com endereço,alerta,499,False

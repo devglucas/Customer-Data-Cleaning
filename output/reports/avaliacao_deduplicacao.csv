@@ -1,0 +1,5 @@
+estrategia,pares_previstos,pares_reais,pares_corretos,precisao_pct,recall_pct,f1_pct,clientes_encontrados,pessoas_reais,pessoas_divididas_em_2_ou_mais_clientes,clientes_misturando_pessoas
+cpf,2857,3332,2857,100.0,85.74,92.33,6362,6000,359,0
+cpf + email_e_nome,3167,3332,3167,100.0,95.05,97.46,6125,6000,125,0
+cpf + email_e_nome + telefone_e_nome,3289,3332,3289,100.0,98.71,99.35,6037,6000,37,0
+cpf + email_e_nome + telefone_e_nome + nascimento_e_nome,3328,3332,3328,100.0,99.88,99.94,6004,6000,4,0

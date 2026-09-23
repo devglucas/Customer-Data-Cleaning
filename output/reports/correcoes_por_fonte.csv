@@ -1,0 +1,10 @@
+correcao,crm,app,loja,total
+nome_reacentuado,1907,0,0,1907
+telefone_nono_digito,802,0,0,802
+telefone_ddd_inferido,289,110,63,462
+email_dominio,227,139,52,418
+cep_zero_restaurado,269,0,0,269
+cidade_apelido,123,55,31,209
+cpf_zeros_restaurados,67,0,74,141
+nome_mojibake,0,47,0,47
+nascimento_implausivel,44,0,0,44
