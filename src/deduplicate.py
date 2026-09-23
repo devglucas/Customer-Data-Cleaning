@@ -3,7 +3,7 @@ Deduplicação (entity resolution): descobre quais registros são a mesma pessoa
 
 1. Blocking: só comparamos registros que compartilham uma chave (CPF, e-mail,
    telefone ou data de nascimento). Um self-merge do Pandas por chave gera os
-   pares candidatos sem comparar todos contra todos (8 mil² = 64 milhões).
+   pares candidatos sem comparar todos contra todos (~38 milhões de pares).
 2. Regras de match: cada bloco tem sua exigência extra (ex.: e-mail igual E
    nome parecido, porque famílias compartilham e-mail).
 3. Restrições "não pode ligar": CPFs válidos diferentes, ou datas de nascimento
