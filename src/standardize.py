@@ -31,6 +31,7 @@ from src.utils import (
     mapear,
     normalizar_espacos,
     parse_data_mista,
+    remover_acentos,
     separar_rejeitados,
     titulo_pt,
 )
@@ -63,11 +64,31 @@ def corrigir_mojibake(serie: pd.Series) -> tuple[pd.Series, pd.Series]:
     return corrigido, (corrigido != serie).fillna(False)
 
 
-def padronizar_nome(serie: pd.Series) -> tuple[pd.Series, pd.Series, pd.Series]:
+def reacentuar(nomes: pd.Series, minimo_ocorrencias: int = 3) -> tuple[pd.Series, pd.Series]:
+    """
+    Restaura acentos perdidos pelo sistema legado ("Brandao" -> "Brandão") usando um
+    vocabulário aprendido da própria base: para cada palavra sem acento, a grafia
+    acentuada mais frequente, desde que apareça pelo menos `minimo_ocorrencias` vezes.
+    Acento não aparece por acaso, então basta ele existir em outras fontes.
+    """
+    palavras = nomes.str.split(" ").explode().rename("palavra").reset_index()
+    palavras["chave"] = remover_acentos(palavras["palavra"]).str.lower()
+    acentuadas = palavras[palavras["palavra"] != remover_acentos(palavras["palavra"])]
+    contagem = acentuadas.groupby("chave")["palavra"].agg(["size", lambda s: s.mode().iat[0]])
+    vocabulario = contagem.loc[contagem["size"] >= minimo_ocorrencias].iloc[:, 1]
+
+    palavras["palavra"] = palavras["chave"].map(vocabulario).fillna(palavras["palavra"])
+    reacentuado = palavras.groupby("index")["palavra"].agg(" ".join).reindex(nomes.index)
+    reacentuado = reacentuado.fillna(nomes).astype("string")
+    return reacentuado, (reacentuado != nomes).fillna(False)
+
+
+def padronizar_nome(serie: pd.Series) -> tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
     nome, mojibake = corrigir_mojibake(normalizar_espacos(serie))
     nome = titulo_pt(nome.str.replace(REGEX_TITULO, "", regex=True))
+    nome, reacentuado = reacentuar(nome)
     chave = chave_texto(nome).str.replace(".", "", regex=False)
-    return nome, chave, mojibake
+    return nome, chave, mojibake, reacentuado
 
 
 # --------------------------------------------------------------------------- #
@@ -191,7 +212,7 @@ def padronizar_registros(registros: pd.DataFrame) -> tuple[pd.DataFrame, pd.Data
     """Aplica todas as regras e devolve (registros_padronizados, rejeitados)."""
     df = registros.copy()
 
-    df["nome"], df["chave_nome"], df["corr_nome_mojibake"] = padronizar_nome(df["nome"])
+    df["nome"], df["chave_nome"], df["corr_nome_mojibake"], df["corr_nome_reacentuado"] = padronizar_nome(df["nome"])
     df["cpf"], df["cpf_status"], df["corr_cpf_zeros_restaurados"] = padronizar_cpf(df["cpf"])
     df["email"], df["corr_email_dominio"] = padronizar_email(df["email"])
     df["data_nascimento"], df["corr_nascimento_implausivel"] = padronizar_nascimento(df["data_nascimento"])

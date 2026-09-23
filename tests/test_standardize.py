@@ -11,15 +11,24 @@ from src.standardize import (
     padronizar_nascimento,
     padronizar_nome,
     padronizar_telefone,
+    reacentuar,
     separar_endereco,
 )
 
 
 def test_nome_remove_titulo_corrige_mojibake_e_caixa():
-    nome, chave, mojibake = padronizar_nome(pd.Series(["SRA. MARIA  DA SILVA ", "JoÃ£o Souza", "ASSUNÇÃO LIMA"]))
+    nome, chave, mojibake, _ = padronizar_nome(pd.Series(["SRA. MARIA  DA SILVA ", "JoÃ£o Souza", "ASSUNÇÃO LIMA"]))
     assert nome.tolist() == ["Maria da Silva", "João Souza", "Assunção Lima"]
     assert chave.tolist() == ["maria da silva", "joao souza", "assuncao lima"]
     assert mojibake.tolist() == [False, True, False]
+
+
+def test_reacentuar_usa_vocabulario_da_propria_base():
+    nomes = pd.Series(["Joao Brandao", "João Lima", "João Dias", "João Souza", "Ana Brandão", "Caio Conceicao"])
+    resultado, alterado = reacentuar(nomes)
+    # "João" aparece 3x com acento -> vocabulário; "Brandão" só 1x -> não é confiável ainda
+    assert resultado.tolist() == ["João Brandao", "João Lima", "João Dias", "João Souza", "Ana Brandão", "Caio Conceicao"]
+    assert alterado.tolist() == [True, False, False, False, False, False]
 
 
 def test_cpf_formatos_e_status():
